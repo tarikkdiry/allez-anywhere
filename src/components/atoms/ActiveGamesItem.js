@@ -1,17 +1,48 @@
-import React, { Component, useState } from 'react';
+import React, { Component, useEffect, useState } from 'react';
+import { TouchableOpacity } from 'react-native';
 import { StyleSheet, View, TextInput, Text, Image } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import * as firebase from 'firebase';
 
-// onClick navigate to Game.js, pass in session and user
 const ActiveGamesItem = ({ session, playerCount }) => {
+    const [destination, setDestination] = useState('');
+
+    const navigation = useNavigation();
+
+    const gameRef = firebase.database().ref(`game`);
+
+    useEffect(() => {
+        // Check whether the session is in 'Lobby' or 'Active' status
+        const getSessionStage = gameRef.on('value', (snapshot) => {
+            try {
+                snapshot.forEach((child) => {
+                    if (child.key === session) {
+                        setDestination(child.val().status === 'lobby' ? 'Lobby' : 'Welcome');
+                    }
+                })
+            } catch(err) {
+                console.log(err);
+            }
+        })
+    });
+    
     return (
-        <View style={styles.container}>
-            <View style={styles.session}>
-                <Text style={styles.text}>{session}</Text>
+        <TouchableOpacity onPress={() => {
+            navigation.push(destination, {
+                session: session
+            })
+            console.log(destination);
+        }}>
+            <View style={styles.container}>
+                <View style={styles.session}>
+                    <Text style={styles.text}>{session}</Text>
+                </View>
+                <View style={styles.playerCount}>
+                    <Text style={styles.text}>{playerCount}</Text>
+                </View>
             </View>
-            <View style={styles.playerCount}>
-                <Text style={styles.text}>{playerCount}</Text>
-            </View>
-        </View>
+        </TouchableOpacity>
+        
     )
 };
 

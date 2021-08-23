@@ -36,7 +36,7 @@ const WelcomeScreen = ({ route, navigation }) => {
             </View>
             <View style={styles.bottom}>
                 <View style={styles.buttons}> 
-                    {/* <Button 
+                    <Button 
                         title="Create Game"
                         style={styles.button}
                         color="white"
@@ -55,7 +55,7 @@ const WelcomeScreen = ({ route, navigation }) => {
 
                             })
                         }}
-                    /> */}
+                    />
                     <Button 
                         title="Active Adventures"
                         style={styles.button}

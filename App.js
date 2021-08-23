@@ -4,7 +4,8 @@ import * as SplashScreen from 'expo-splash-screen';
 
 // EXPO
 import * as Font from 'expo-font';
-import { AppLoading } from 'expo';
+// import { AppLoading } from 'expo';
+import AppLoading from 'expo-app-loading';
 import * as firebase from 'firebase';
 
 // NAVIGATION
@@ -56,6 +57,7 @@ export default function App() {
       <AppLoading 
         startAsync={fetchFonts}
         onFinish={() => setFontsLoaded(true)}
+        onError={console.warn}
       />
     )
   }

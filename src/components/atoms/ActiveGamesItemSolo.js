@@ -3,7 +3,6 @@ import { StyleSheet, View, TextInput, Text, Image } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native';
 
-// onClick navigate to Game.js, pass in session and user
 const ActiveGamesItem = ({ session, location, sessionType }) => {
     const navigation = useNavigation();
 

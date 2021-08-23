@@ -26,6 +26,7 @@ const SoloLocationSelectScreen = ({ route, navigation }) => {
                 hostEmail: userEmail,
                 location: location,
                 timestamp: Date.now(),
+                selectedCards: []
             }).then(
                 console.log('Game session created!'),
                 setIsLoading(false)

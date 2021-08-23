@@ -29,7 +29,7 @@ const ActiveGamesList = ({ sessionListHost, sessionListPlayer, sessionListSolo, 
                     )
                 })
             }
-            {/* {selection ?
+            {selection ?
                 sessionListHost.map((session, index) => {
                     return (
                         <View key={index}>
@@ -51,7 +51,7 @@ const ActiveGamesList = ({ sessionListHost, sessionListPlayer, sessionListSolo, 
                         </View>
                     )
                 })
-            } */}
+            }
         </View>
     )
 };

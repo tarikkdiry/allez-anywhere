@@ -59,14 +59,8 @@ const LobbyScreen = ({ route, navigation }) => {
             if (JSON.stringify(fetchedPlayers) != JSON.stringify(players)) {
                 setPlayers(fetchedPlayers);
             }     
-            
-            // Check if everyone is ready to proceed, host can then start the session
-            // length - 1 to account for the host we don't want to include
-            if (players.length - 1 == readyCount && readyCount > 0) {
-                setEveryoneReady(true);
-            } else {
-                setEveryoneReady(false);
-            } 
+
+            (players.length - 1 == readyCount && readyCount > 0) ? setEveryoneReady(true) : setEveryoneReady(false);
         });
 
         // If the host leaves, the game is ended for everyone
