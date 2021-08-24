@@ -42,7 +42,8 @@ const CreateGameScreen = ({ route, navigation }) => {
                 location: location,
                 timestamp: Date.now(),
                 waiting: [],
-                ready: []
+                ready: [],
+                currentPlayer: name
             });
             
             console.log('Game session created!');

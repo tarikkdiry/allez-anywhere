@@ -27,6 +27,8 @@ const ActiveGames = ({ route, navigation }) => {
     const soloRef = firebase.database().ref(`solo`);
 
     useEffect(() => {
+        // console.log(sessionDetailsPlayer);
+
         const getActiveHostedGames = gameRef.on('value', (snapshot) => {
             try {
                 let hostedSessions = [];
@@ -34,7 +36,10 @@ const ActiveGames = ({ route, navigation }) => {
                     if (child.val().hostEmail === userEmail) {
                         let sessionId = child.key;
                         let pCount = child.val().playerCount;
-                        hostedSessions.push([sessionId, pCount]);
+                        hostedSessions.push({
+                            sessionId: sessionId, 
+                            pCount: pCount
+                        });
                     }
                 });
 
@@ -60,9 +65,13 @@ const ActiveGames = ({ route, navigation }) => {
                         let pVal = baby.val();
                         // Passing name as count for now
                         // MUST REFACTOR
+                        // MIGHT HAVE TO BE [sessionId, pName, country/destination/whatever]
                         let pName = "as: " + baby.val().playerName;
                         if (pVal.playerEmail === userEmail && pVal.role === 'Player') {
-                            playerSessions.push([sessionId, pName]);
+                            playerSessions.push({
+                                sessionId: sessionId, 
+                                pName: pName,
+                            });
                         }
                     })
                 });

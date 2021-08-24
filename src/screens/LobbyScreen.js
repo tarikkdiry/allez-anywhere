@@ -60,6 +60,7 @@ const LobbyScreen = ({ route, navigation }) => {
                 setPlayers(fetchedPlayers);
             }     
 
+            // Check to see if all players are ready to begin the game
             (players.length - 1 == readyCount && readyCount > 0) ? setEveryoneReady(true) : setEveryoneReady(false);
         });
 
@@ -230,9 +231,11 @@ const LobbyScreen = ({ route, navigation }) => {
                                     title={(everyoneReady) ? 'START' : 'Waiting for players to ready up...'}
                                     color="white"
                                     disabled={(everyoneReady) ? false : true}
-                                    // onPress={() => {
-                                    //     readyUp();
-                                    // }}
+                                    onPress={() => {
+                                        navigation.navigate('Game', {
+                                            session: session
+                                        })
+                                    }}
                                 />
                             )
                     }

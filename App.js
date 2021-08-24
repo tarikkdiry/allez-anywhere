@@ -21,10 +21,13 @@ import CreateGameScreen from './src/screens/CreateGame';
 import JoinGameScreen from './src/screens/JoinGame';
 import LobbyScreen from './src/screens/LobbyScreen';
 
-// GAME
+// SOLO GAME
 import SoloLocationSelectScreen from './src/screens/modes/solo/SoloLocationSelect';
 import SoloTopicSelectScreen from './src/screens/modes/solo/SoloTopicSelect';
-import SoloGame from './src/screens/modes/solo/SoloGame';
+import SoloGameScreen from './src/screens/modes/solo/SoloGame';
+
+// MULTIPLAYER GAME
+import GameScreen from './src/screens/modes/multi/Game';
 
 const Stack = createStackNavigator();
 
@@ -130,7 +133,7 @@ export default function App() {
         />
         <Stack.Screen 
           name="SoloGame"
-          component={SoloGame}
+          component={SoloGameScreen}
           options={{
             headerShown: false,
             gestureEnabled: false
@@ -139,6 +142,14 @@ export default function App() {
         <Stack.Screen 
           name="Lobby"
           component={LobbyScreen}
+          options={{
+            headerShown: false,
+            gestureEnabled: false
+          }}
+        />
+        <Stack.Screen 
+          name="Game"
+          component={GameScreen}
           options={{
             headerShown: false,
             gestureEnabled: false
