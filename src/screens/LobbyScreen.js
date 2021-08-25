@@ -15,6 +15,7 @@ const LobbyScreen = ({ route, navigation }) => {
     const [players, setPlayers] = useState([['', '']]);
     const [everyoneReady, setEveryoneReady] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+    const [startGame, setStartGame] = useState(true);
     const [gameOver, setGameOver] = useState(false);
     const [readyCount, setReadyCount] = useState(0); // Excluding Host
 
@@ -58,7 +59,7 @@ const LobbyScreen = ({ route, navigation }) => {
             // Updates the players state whenever a new player joins
             if (JSON.stringify(fetchedPlayers) != JSON.stringify(players)) {
                 setPlayers(fetchedPlayers);
-            }     
+            }
 
             // Check to see if all players are ready to begin the game
             (players.length - 1 == readyCount && readyCount > 0) ? setEveryoneReady(true) : setEveryoneReady(false);
@@ -72,10 +73,19 @@ const LobbyScreen = ({ route, navigation }) => {
             }
         });
 
+        const listenForStatus = gameRef.on('value', (snapshot) => {
+            if (snapshot.val().status === 'Active') {
+                navigation.navigate('Game', {
+                    session: session
+                })
+            }
+        });
+
         return () => {
             readyRef.off('value', readyPlayers);
             playerRef.off('value', listenForPlayers);
-            gameRef.off('value', listenForGame)
+            gameRef.off('value', listenForGame);
+            gameRef.off('value', listenForStatus)
         }
     });
 
@@ -172,6 +182,18 @@ const LobbyScreen = ({ route, navigation }) => {
         });
     };
 
+    const setGameActive = async() => {
+        setStartGame(true);
+        let currentSession = await firebase.database().ref(`game/${session}`).once('value');
+        let currentSessionObj = currentSession.val();
+
+        try {
+            firebase.database().ref(`game/${session}/status`).set('Active');
+        } catch (err) {
+            console.log('Cannot start game...');
+        }
+    };
+
     // Delete game from all root children
     const deleteGame = (gameCode) => {
         firebase.database().ref('game/' + gameCode).remove();
@@ -232,9 +254,7 @@ const LobbyScreen = ({ route, navigation }) => {
                                     color="white"
                                     disabled={(everyoneReady) ? false : true}
                                     onPress={() => {
-                                        navigation.navigate('Game', {
-                                            session: session
-                                        })
+                                        setGameActive();
                                     }}
                                 />
                             )
