@@ -17,88 +17,146 @@ import NewCard from '../../../components/molecules/NewCard';
 
 const SoloGame = ({route, navigation}) => {
     const { session, location, topic, currentPlayer } = route.params;
-    const { height } = Dimensions.get('window');
-    const [containerHeight, setContainerHeight] = useState(height);
+
     const [isLoading, setIsLoading] = useState(false);
+    const [host, setHost] = useState();
+    const [players, setPlayers] = useState(['TARIK', 'LAKAKA']);
+
+    // DYNAMIC GAME INFO
     const [playerTurn, setPlayerTurn] = useState(currentPlayer);
-    const MARGIN = 16;
-    // const CARD_HEIGHT = DEFAULT_CARD_HEIGHT + MARGIN * 2;
-
-    // GAME STATES
-    const [isSelectMode, setIsSelectMode] = useState(true);
-
-    // CARD STATES
-    const [currentCard, setCurrentCard] = useState(false);
-    const [selectedCards, setSelectedCards] = useState([]);
-
-    // REMAINING AVAILABLE CARDS
-    // MAY NEED TO UPDATE IN DATABASE
-    const [availableCards, setAvailableCards] = useState(data);
 
     // Firebase refs
-    const gameRef = firebase.database().ref(`game`);
-    const playerRef = firebase.database().ref(`players`);
-    const soloRef = firebase.database().ref(`solo`);
-
-    // ANIMATIONS
-    const { gestureHandler, translation, velocity, state } = usePanGestureHandler();
-    const translateX = withDecay({ value: translation.x, velocity: velocity.x, state });
-    const visibleCards = Math.floor(containerHeight / CARD_HEIGHT);
-
-    const fadeAnim = useRef(new Animated.Value(0)).current;
+    const gameRef = firebase.database().ref(`game/${session}`);
+    const playerRef = firebase.database().ref(`players/${session}`);
 
     useEffect(() => {
+        !players.length && getPlayers();
+        console.log(players);
+        /*
+            Get host of current session
+        */
+        const getHost = gameRef.on('value', (snapshot) => {
+            setHost(snapshot.val().host);
+            // console.log(host);
+        });
 
-        // const setCurrentPlayer
+        /*
+            Get all players on render
+        */
+        // const watchPlayers = playerRef.on('value', (snapshot) => {
+        //     // let playersArr = [];
+        //     getPlayers();
+        // });
+
+        const updatePlayerTurn = gameRef.on('value', (snapshot) => {
+
+        });
+    });
+
+    const getPlayers = () => {
+        playerRef.get().then((snapshot) => {
+            console.log(snapshot);
+            snapshot.forEach((child) => {
+                if (!players.includes(child.val().playerName)) {
+                    setPlayers([...players, child.val().playerName]);
+                }
+            })
+        });
+
+        // console.log(players);
+    };
+
+    const updatePlayerTurnHelper = () => {
+
+    };
+
+    // return (
+    //     <View style={styles.container}>
+    //         <Text>Wasssup</Text>
+    //     </View>
+    // )
+    // const { session, location, topic, currentPlayer } = route.params;
+    // const { height } = Dimensions.get('window');
+    // const [containerHeight, setContainerHeight] = useState(height);
+    // const [playerTurn, setPlayerTurn] = useState(currentPlayer);
+    // const MARGIN = 16;
+    // // const CARD_HEIGHT = DEFAULT_CARD_HEIGHT + MARGIN * 2;
+
+    // // GAME STATES
+    // const [isSelectMode, setIsSelectMode] = useState(true);
+
+    // // CARD STATES
+    // const [currentCard, setCurrentCard] = useState(false);
+    // const [selectedCards, setSelectedCards] = useState([]);
+
+    // // REMAINING AVAILABLE CARDS
+    // // MAY NEED TO UPDATE IN DATABASE
+    // const [availableCards, setAvailableCards] = useState(data);
+
+    // // Firebase refs
+    // const gameRef = firebase.database().ref(`game`);
+    // const playerRef = firebase.database().ref(`players`);
+    // const soloRef = firebase.database().ref(`solo`);
+
+    // // ANIMATIONS
+    // const { gestureHandler, translation, velocity, state } = usePanGestureHandler();
+    // const translateX = withDecay({ value: translation.x, velocity: velocity.x, state });
+    // const visibleCards = Math.floor(containerHeight / CARD_HEIGHT);
+
+    // const fadeAnim = useRef(new Animated.Value(0)).current;
+
+    // useEffect(() => {
+
+    //     // const setCurrentPlayer
         
-    }, [selectedCards]);
+    // }, [selectedCards]);
 
-    const y = diffClamp(
-        withDecay({ 
-            value: translation.y, 
-            velocity: velocity.y, 
-            state,
-        }),
-        -data.length * CARD_HEIGHT + visibleCards * CARD_HEIGHT, 0
-    );
+    // const y = diffClamp(
+    //     withDecay({ 
+    //         value: translation.y, 
+    //         velocity: velocity.y, 
+    //         state,
+    //     }),
+    //     -data.length * CARD_HEIGHT + visibleCards * CARD_HEIGHT, 0
+    // );
 
-    // const deleteGame = (session) => {
-    //     firebase.database().ref('solo/' + session).remove();
-    // };
+    // // const deleteGame = (session) => {
+    // //     firebase.database().ref('solo/' + session).remove();
+    // // };
     
-    const onSelect = (id) => {
-        // setSelectedCard(id); // THE ISSUE IS HERE, CARDS WONT FLIP ON FIRST TAP
-        // console.log('Selected: ' + id);
-        setIsSelectMode(true);
-        console.log(id);
+    // const onSelect = (id) => {
+    //     // setSelectedCard(id); // THE ISSUE IS HERE, CARDS WONT FLIP ON FIRST TAP
+    //     // console.log('Selected: ' + id);
+    //     setIsSelectMode(true);
+    //     console.log(id);
 
-        setSelectedCards([...selectedCards, id]);
+    //     setSelectedCards([...selectedCards, id]);
 
-        console.log(selectedCards);
+    //     console.log(selectedCards);
 
-        availableCards.map((item) => {
-            // console.log('=======Item!=======');
-            if (item.id !== id) { // REFACTOR: Exclude ALL previously selected cards
-                // console.log(item) 
-            }
-            // console.log(item);
-        }); 
-    };
+    //     availableCards.map((item) => {
+    //         // console.log('=======Item!=======');
+    //         if (item.id !== id) { // REFACTOR: Exclude ALL previously selected cards
+    //             // console.log(item) 
+    //         }
+    //         // console.log(item);
+    //     }); 
+    // };
 
-    const fadeIn = () => {
-        Animated.timing(fadeAnim, {
-            toValue: 1,
-            duration: 5000
-        }).start();
-    };
+    // const fadeIn = () => {
+    //     Animated.timing(fadeAnim, {
+    //         toValue: 1,
+    //         duration: 5000
+    //     }).start();
+    // };
 
-    const Idle = () => {
-        return (
-            <View style={styles.container}>
-                <Text>{``}</Text>
-            </View>
-        )
-    }
+    // const Idle = () => {
+    //     return (
+    //         <View style={styles.container}>
+    //             <Text>{``}</Text>
+    //         </View>
+    //     )
+    // }
 
     return (
         <>
@@ -119,7 +177,7 @@ const SoloGame = ({route, navigation}) => {
                     />
                     </TouchableOpacity>
                 </View>
-                <View style={styles.bottom}>
+                {/* <View style={styles.bottom}>
                     <View 
                         style={styles.card}
                         onLayout={({
@@ -184,7 +242,7 @@ const SoloGame = ({route, navigation}) => {
                             </PanGestureHandler>
                         </ScrollView>
                     </View>
-                </View>
+                </View> */}
             </View>
             ) : (
                 <LoadingScreen 

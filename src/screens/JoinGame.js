@@ -9,6 +9,8 @@ import LoadingScreen from '../components/organisms/LoadingScreen';
 import * as Fire from '../api/FireApi';
 
 const JoinGameScreen = ({ route, navigation }) => {
+    const { userId } = route.params;
+
     const [playerName, setPlayerName] = useState('');
     const [playerEmail, setPlayerEmail] = useState(firebase.auth().currentUser.email);
     const [isLoading, setIsLoading] = useState(false);
@@ -40,6 +42,7 @@ const JoinGameScreen = ({ route, navigation }) => {
 
         if (sessionOpen) {
             let ref = firebase.database().ref(`players/${session}`).push({
+                playerId: userId,
                 playerName: playerName,
                 playerEmail: playerEmail,
                 role: 'Player'
@@ -48,6 +51,7 @@ const JoinGameScreen = ({ route, navigation }) => {
             console.log(`${name} is joining the game!`),
             navigation.navigate('Lobby', {
                 session: gameCode,
+                playerId: userId,
                 playerName: playerName,
                 playerKey: ref.key 
             })
@@ -78,7 +82,6 @@ const JoinGameScreen = ({ route, navigation }) => {
             let snapshot = await firebase.database().ref(`game`).orderByKey().equalTo(session).once('value');
             
             if (snapshot.val() == null) {
-                // console.log('This game cannot be joined. :(');
                 setModalMessage('This session does not exist!');
                 return false;
             }

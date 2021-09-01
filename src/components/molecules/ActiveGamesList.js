@@ -5,11 +5,6 @@ import ActiveGamesItemSolo from '../atoms/ActiveGamesItemSolo';
 
 const ActiveGamesList = ({ sessionListHost, sessionListPlayer, sessionListSolo, selection }) => {
     const isSingle = (count) => {
-        // if (count == 1) {
-        //     return count + ' traveler';
-        // } else {
-        //     return count + ' travelers';
-        // }
         return (count === 1) ? (count + ' traveler') : (count + ' travelers');
     };
 

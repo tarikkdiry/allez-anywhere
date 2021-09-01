@@ -27,8 +27,6 @@ const ActiveGames = ({ route, navigation }) => {
     const soloRef = firebase.database().ref(`solo`);
 
     useEffect(() => {
-        // console.log(sessionDetailsPlayer);
-
         const getActiveHostedGames = gameRef.on('value', (snapshot) => {
             try {
                 let hostedSessions = [];
@@ -93,7 +91,6 @@ const ActiveGames = ({ route, navigation }) => {
                     let sessionId = child.key;
                     let location = child.val().location;
                     if (child.val().hostEmail === userEmail) {
-                        // soloSessions.push([child.val().location, 'Solo']);
                         soloSessions.push({
                             sessionId: sessionId,
                             location: location,

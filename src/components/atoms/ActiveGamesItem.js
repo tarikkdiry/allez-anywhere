@@ -17,7 +17,7 @@ const ActiveGamesItem = ({ session, playerCount }) => {
             try {
                 snapshot.forEach((child) => {
                     if (child.key === session) {
-                        setDestination(child.val().status === 'lobby' ? 'Lobby' : 'Welcome');
+                        setDestination(child.val().status === 'lobby' ? 'Lobby' : 'Game');
                     }
                 })
             } catch(err) {
@@ -31,7 +31,6 @@ const ActiveGamesItem = ({ session, playerCount }) => {
             navigation.push(destination, {
                 session: session
             })
-            console.log(destination);
         }}>
             <View style={styles.container}>
                 <View style={styles.session}>

@@ -8,7 +8,7 @@ import firebase from 'firebase';
 import { login, signup, signout } from '../api/CardsApi';
 
 const WelcomeScreen = ({ route, navigation }) => {
-    const { userName } = route.params;
+    const { userId } = route.params;
 
     const [userEmail, setUserEmail] = useState(firebase.auth().currentUser.email);
 
@@ -42,6 +42,7 @@ const WelcomeScreen = ({ route, navigation }) => {
                         color="white"
                         onPress={() => {
                             navigation.push('CreateGame', {
+                                userId: userId,
                                 userEmail: userEmail
                             })
                         }}
@@ -52,7 +53,7 @@ const WelcomeScreen = ({ route, navigation }) => {
                         color="white"
                         onPress={() => {
                             navigation.push('JoinGame', {
-
+                                userId: userId,
                             })
                         }}
                     />
@@ -62,6 +63,7 @@ const WelcomeScreen = ({ route, navigation }) => {
                         color="white"
                         onPress={() => {
                             navigation.push('ActiveGames', {
+                                userId: userId,
                                 userEmail: userEmail
                             })
                         }}
@@ -72,6 +74,7 @@ const WelcomeScreen = ({ route, navigation }) => {
                         color="white"
                         onPress={() => {
                             navigation.push('SoloLocationSelect', {
+                                userId: userId,
                                 userEmail: userEmail
                             })
                         }}
